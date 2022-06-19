@@ -25,6 +25,17 @@ func silt(req *leancloud.FunctionRequest) (interface{}, error) {
 		return nil, errors.New("invalid params")
 	}
 
+	content, err := format(content)
+	if err != nil {
+		return nil, err
+	}
+
+	//return content, nil
+	Sentences, err := AnalysisArticle(content)
+	return Sentences, err
+}
+
+func format(content string) (string, error) {
 	// 特殊字符的替换
 	content = strings.ReplaceAll(content, "&gt;", ">")
 	content = strings.ReplaceAll(content, "<i>", " ")
@@ -41,7 +52,7 @@ func silt(req *leancloud.FunctionRequest) (interface{}, error) {
 	articlesSentences := ""
 	doc, err := prose.NewDocument(content)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	sentences := doc.Sentences()
 	atLeastSentenceNumber := int(len(doc.Tokens()) / 30)
@@ -59,10 +70,7 @@ func silt(req *leancloud.FunctionRequest) (interface{}, error) {
 		}
 		content = articlesSentences
 	}
-
-	//return content, nil
-	Sentences, err := AnalysisArticle(content)
-	return Sentences, err
+	return content, nil
 }
 
 func addLineBreakToStartTime(start string) string {
@@ -83,8 +91,9 @@ func AnalysisArticle(article string) (sentences []Sentence, err error) {
 			if sentence.SeekTo == "" {
 				sentence.SeekTo = tok.Text
 			}
+		} else {
+			sentence.Words = append(sentence.Words, tok.Text)
 		}
-		sentence.Words = append(sentence.Words, tok.Text)
 		// 换行就要另起一句
 		if tok.Text == "\n" {
 			sentences = append(sentences, sentence)
