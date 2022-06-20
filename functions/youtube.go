@@ -9,10 +9,23 @@ import (
 	"github.com/leancloud/go-sdk/leancloud"
 )
 
+var remoteClient *leancloud.Client
 var client *leancloud.Client
+
+func createRemoteClient() *leancloud.Client {
+	options := &leancloud.ClientOptions{
+		AppID:     "RFO2ogo9Li9HhyPaYDQloRUL-MdYXbMMI",
+		AppKey:    "NHW1gCDPBExOhEVMxPnzBabE",
+		MasterKey: "FOW0ngVSritVU5BWTBGl4Rhj",
+		ServerURL: "https://bigzhu.avosapps.us",
+	}
+
+	return leancloud.NewClient(options)
+}
 
 func init() {
 	// create client, class function from http
+	remoteClient = createRemoteClient()
 	client = leancloud.NewEnvClient()
 	leancloud.Engine.Define("youtube", youtube)
 }
@@ -29,7 +42,10 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	}
 
 	//captions, err := leancloud.Engine.Run("captions", map[string]string{"uri": uri})
-	captions, err := client.Run("captions", map[string]string{"uri": uri})
+	//captions, err := client.Run("captions", map[string]string{"uri": uri})
+	//captions := ""
+	//err := client.RPC("captions", map[string]string{"uri": uri}, &captions)
+	captions, err := remoteClient.Run("captions", map[string]string{"uri": uri})
 	if err != nil {
 		panic(err)
 	}
@@ -48,7 +64,7 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	article.Owner = req.CurrentUser
 	article.Sentences = Sentences
 
-	videoInfoRemote, err := client.Run("videoInfo", map[string]string{"uri": uri})
+	videoInfoRemote, err := remoteClient.Run("videoInfo", map[string]string{"uri": uri})
 	if err != nil {
 		return nil, err
 	}
