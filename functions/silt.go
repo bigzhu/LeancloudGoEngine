@@ -105,9 +105,3 @@ func AnalysisArticle(article string) (sentences []Sentence, err error) {
 	}
 	return
 }
-
-// Sentence 存储数据库的句子
-type Sentence struct {
-	SeekTo string   `json:"seekTo"` // 本句开始说的视频时间
-	Words  []string `json:"words"`
-}

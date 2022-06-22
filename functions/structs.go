@@ -1,17 +1,32 @@
 package functions
 
-import "github.com/leancloud/go-sdk/leancloud"
+import (
+	"github.com/leancloud/go-sdk/leancloud"
+)
 
 type Article struct {
 	leancloud.Object
-	Owner     *leancloud.User `json:"owner"`
-	Sentences []Sentence      `json:"sentences"`
-	WordCount int             `json:"wordCount"`
-	Title     string          `json:"title"`
-	Youtube   string          `json:"youtube"`
-	Avatar    string          `json:"avatar"`
-	Channel   string          `json:"channel"`
-	Thumbnail string          `json:"thumbnail"`
+	Owner     leancloud.User `json:"owner"`
+	Sentences []Sentence     `json:"sentences"`
+	WordCount int            `json:"wordCount"`
+	Title     string         `json:"title"`
+	Youtube   string         `json:"youtube"`
+	Avatar    string         `json:"avatar"`
+	Channel   string         `json:"channel"`
+	Thumbnail string         `json:"thumbnail"`
+}
+type UserArticle struct {
+	leancloud.Object
+	Owner          leancloud.User `json:"owner"`
+	Article        Article        `json:"article"`
+	AcquiringCount int            `json:"acquiringCount"`
+	IsFollowing    bool           `json:"isFollowing"`
+}
+
+// Sentence 存储数据库的句子
+type Sentence struct {
+	SeekTo string   `json:"seekTo"`
+	Words  []string `json:"words"`
 }
 
 type VideoInfo struct {
