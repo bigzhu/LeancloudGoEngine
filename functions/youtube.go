@@ -1,8 +1,6 @@
 package functions
 
 import (
-	"fmt"
-
 	"github.com/leancloud/go-sdk/leancloud"
 )
 
@@ -20,12 +18,10 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	//check if youtube video is exists
 	article := Article{}
 	err = client.Class("Article").NewQuery().EqualTo("youtube", uri).First(&article)
-	fmt.Println(article.ID)
-	//找到,确保绑定后返回
 	if err == nil {
-		userArticle, err := bindUserArticle(req.CurrentUser, &article)
-		return userArticle, err
+		return article.ID, err
 	}
+
 	//不是这个错,说明查询出问题了
 	if err.Error() != "no matched object found" {
 		return nil, err
@@ -45,8 +41,6 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	//userArticle, err := bindUserArticle(req.CurrentUser, &article)
-	_, err = bindUserArticle(req.CurrentUser, &article)
 
-	return article, err
+	return article.ID, err
 }
