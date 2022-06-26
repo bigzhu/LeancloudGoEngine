@@ -91,18 +91,19 @@ func AnalysisArticle(article string) (sentences []Sentence, err error) {
 			if sentence.SeekTo == "" {
 				sentence.SeekTo = tok.Text
 			}
-		} else {
-			// 多余的换行没必要加进来
-			if tok.Text != "\n" {
-				sentence.Words = append(sentence.Words, tok.Text)
-			}
+			continue
 		}
 		// 换行就要另起一句
-		// 避免只有一个 \n 的句子, 生成空的 sentence
-		if tok.Text == "\n" && len(sentence.Words) != 1 {
-			sentences = append(sentences, sentence)
-			sentence = Sentence{}
+		if tok.Text == "\n" {
+			// 避免只有一个 \n 的句子, 生成空的 sentence
+			if len(sentence.Words) > 0 {
+				sentences = append(sentences, sentence)
+				sentence = Sentence{}
+			}
+			continue
 		}
+		sentence.Words = append(sentence.Words, tok.Text)
+
 	}
 	if len(sentence.Words) > 0 {
 		sentences = append(sentences, sentence)
