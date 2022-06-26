@@ -92,10 +92,14 @@ func AnalysisArticle(article string) (sentences []Sentence, err error) {
 				sentence.SeekTo = tok.Text
 			}
 		} else {
-			sentence.Words = append(sentence.Words, tok.Text)
+			// 多余的换行没必要加进来
+			if tok.Text != "\n" {
+				sentence.Words = append(sentence.Words, tok.Text)
+			}
 		}
 		// 换行就要另起一句
-		if tok.Text == "\n" {
+		// 避免只有一个 \n 的句子, 生成空的 sentence
+		if tok.Text == "\n" && len(sentence.Words) != 1 {
 			sentences = append(sentences, sentence)
 			sentence = Sentence{}
 		}
