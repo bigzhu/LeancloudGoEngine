@@ -4,6 +4,13 @@ import (
 	"github.com/leancloud/go-sdk/leancloud"
 )
 
+type AcquiringWord struct {
+	leancloud.Object
+	Owner leancloud.User `json:"owner"`
+	Word  string         `json:"word"`
+	Count int            `json:"count"`
+	Done  *bool          `json:"done"`
+}
 type Article struct {
 	leancloud.Object
 	Owner     leancloud.User `json:"owner"`
