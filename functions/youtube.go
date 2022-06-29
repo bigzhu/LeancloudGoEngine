@@ -19,6 +19,8 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	article := Article{}
 	err = client.Class("Article").NewQuery().EqualTo("youtube", uri).First(&article)
 	if err == nil {
+		//no need return Sentences
+		article.Sentences = make([]Sentence, 0)
 		return article, err
 	}
 
