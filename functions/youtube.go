@@ -42,5 +42,5 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 		return nil, err
 	}
 
-	return article.ID, err
+	return article, err
 }
