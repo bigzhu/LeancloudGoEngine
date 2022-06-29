@@ -19,7 +19,7 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	article := Article{}
 	err = client.Class("Article").NewQuery().EqualTo("youtube", uri).First(&article)
 	if err == nil {
-		return article.ID, err
+		return article, err
 	}
 
 	//不是这个错,说明查询出问题了
@@ -41,6 +41,6 @@ func youtube(req *leancloud.FunctionRequest) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	article.Sentences = make([]Sentence, 0)
 	return article, err
 }
